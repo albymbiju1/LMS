@@ -103,12 +103,43 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><?php echo htmlspecialchars($course['title']); ?> - LMS</title>
+    <title>Course - LMS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        .wrapper { width: 1200px; margin: 0 auto; padding: 20px; }
-        .course-header { background-color: #f8f9fa; padding: 20px; margin-bottom: 20px; border-radius: 5px; }
+        .course-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+        .module-list {
+            margin-top: 2rem;
+        }
+        .module-item {
+            transition: var(--transition);
+            border-left: 4px solid var(--primary-color);
+        }
+        .module-item:hover {
+            transform: translateX(5px);
+        }
+        .resource-list {
+            margin-top: 1rem;
+        }
+        .resource-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            background: #f8f9fa;
+            margin-bottom: 0.5rem;
+        }
+        .resource-item i {
+            margin-right: 1rem;
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body>

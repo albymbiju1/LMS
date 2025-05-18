@@ -63,15 +63,52 @@ mysqli_stmt_close($stmt);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Module: <?= htmlspecialchars($module['module_title']) ?></title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    .wrapper { max-width: 800px; margin: 30px auto; }
-    .content-item { margin-bottom: 15px; }
-    .content-item h6 { margin-bottom: 5px; }
-    .content-type { font-size: 0.9em; color: #6c757d; }
-  </style>
+    <meta charset="UTF-8">
+    <title>View Module - LMS</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .module-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+        .content-section {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+        .resource-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            background: #f8f9fa;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+        .resource-item:hover {
+            transform: translateX(5px);
+            background: #e9ecef;
+        }
+        .resource-item i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-right: 1rem;
+        }
+        .resource-info {
+            flex-grow: 1;
+        }
+        .resource-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

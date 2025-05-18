@@ -96,9 +96,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Assignment - LMS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .submit-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+        .assignment-info {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+        .due-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            margin-top: 1rem;
+        }
+        .upload-section {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            border: 2px dashed #dee2e6;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .upload-section:hover {
+            border-color: var(--primary-color);
+            background: #fff;
+        }
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        .file-preview {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: var(--border-radius);
+            display: none;
+        }
+        .file-preview.active {
+            display: block;
+        }
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+        }
+        .file-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

@@ -107,9 +107,76 @@ if ($role === 'instructor' && $quiz['instructor_id'] === $user_id) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Quiz - LMS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .quiz-header {
+            background: linear-gradient(135deg, var(--warning-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+        .quiz-info {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+        }
+        .question-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+        .question-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+        .option-item {
+            padding: 1rem;
+            border: 2px solid #eee;
+            border-radius: var(--border-radius);
+            margin-bottom: 0.5rem;
+            transition: var(--transition);
+        }
+        .option-item:hover {
+            border-color: var(--primary-color);
+            background: #f8f9fa;
+        }
+        .option-item.correct {
+            border-color: var(--success-color);
+            background: rgba(46, 204, 113, 0.1);
+        }
+        .option-item.incorrect {
+            border-color: var(--danger-color);
+            background: rgba(231, 76, 60, 0.1);
+        }
+        .timer-display {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--warning-color);
+            text-align: center;
+            margin: 1rem 0;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

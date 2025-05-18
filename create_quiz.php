@@ -64,9 +64,83 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <meta charset="UTF-8">
     <title>Create Quiz - LMS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body{ font: 14px sans-serif; }
-        .wrapper{ width: 600px; padding: 20px; margin: 0 auto; margin-top: 50px; }
+        .create-header {
+            background: linear-gradient(135deg, var(--warning-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+        .form-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        .question-section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+        }
+        .question-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            border: 2px solid #eee;
+            transition: var(--transition);
+        }
+        .question-card:hover {
+            border-color: var(--warning-color);
+            transform: translateY(-2px);
+        }
+        .option-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 2px solid #eee;
+            border-radius: var(--border-radius);
+            margin-bottom: 0.5rem;
+            transition: var(--transition);
+        }
+        .option-item:hover {
+            border-color: var(--primary-color);
+            background: #f8f9fa;
+        }
+        .option-item.correct {
+            border-color: var(--success-color);
+            background: rgba(46, 204, 113, 0.1);
+        }
+        .option-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .option-actions button {
+            padding: 0.5rem;
+            border: none;
+            background: none;
+            color: var(--secondary-color);
+            transition: var(--transition);
+        }
+        .option-actions button:hover {
+            color: var(--primary-color);
+        }
+        .timer-settings {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>

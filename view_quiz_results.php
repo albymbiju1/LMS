@@ -64,7 +64,146 @@ $attempts = mysqli_stmt_get_result($stmt);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Quiz Results - LMS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .results-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+        .results-table {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+        .results-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 500;
+            padding: 1rem;
+        }
+        .results-table td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+        .results-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .results-table tr:hover {
+            background: #e9ecef;
+        }
+        .score-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            min-width: 100px;
+            justify-content: center;
+        }
+        .score-high {
+            background: var(--success-color);
+            color: white;
+        }
+        .score-medium {
+            background: var(--warning-color);
+            color: white;
+        }
+        .score-low {
+            background: var(--danger-color);
+            color: white;
+        }
+        .attempt-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        .status-completed {
+            background: var(--success-color);
+            color: white;
+        }
+        .status-in-progress {
+            background: var(--warning-color);
+            color: white;
+        }
+        .status-not-started {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .results-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .action-button {
+            padding: 0.5rem;
+            border: none;
+            background: none;
+            color: var(--secondary-color);
+            transition: var(--transition);
+        }
+        .action-button:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        .results-stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            flex: 1;
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        .stat-label {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        .progress-section {
+            margin-top: 2rem;
+        }
+        .progress-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        .progress-title {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        .progress-bar {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

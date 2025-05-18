@@ -48,11 +48,41 @@ if($stmt = mysqli_prepare($conn, $sql)){
     <title>Assignments - LMS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
     <style>
         .wrapper { width: 1200px; margin: 0 auto; padding: 20px; }
-        .assignment-card { margin-bottom: 20px; }
-        .due-date { color: #dc3545; }
-        .submitted { color: #28a745; }
+        .assignment-card {
+            transition: var(--transition);
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        .assignment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .assignment-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        .status-pending {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        .status-submitted {
+            background-color: var(--success-color);
+            color: white;
+        }
+        .status-graded {
+            background-color: var(--primary-color);
+            color: white;
+        }
     </style>
 </head>
 <body>

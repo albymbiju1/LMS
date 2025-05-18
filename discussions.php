@@ -76,9 +76,49 @@ if($_SERVER["REQUEST_METHOD"] === "POST" && $role === "instructor"){
     <title>Discussions - LMS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
     <style>
         .wrapper{ width: 1200px; margin: 0 auto; padding: 20px; }
-        .discussion-card { margin-bottom: 20px; }
+        .discussion-card {
+            transition: var(--transition);
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        .discussion-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .discussion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .discussion-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        .discussion-meta i {
+            margin-right: 0.5rem;
+        }
+        .discussion-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary-color);
+        }
+        .stat i {
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body>

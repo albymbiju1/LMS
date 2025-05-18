@@ -76,15 +76,40 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <title>Login - LMS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body { font: 14px sans-serif; }
-        .wrapper { width: 360px; padding: 20px; margin: 0 auto; margin-top: 50px; }
+        body { 
+            font: 14px sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .wrapper { 
+            width: 400px;
+            padding: 30px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-header h2 {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
     <div class="wrapper">
-        <h2>Login</h2>
-        <p>Please fill in your credentials to login.</p>
+        <div class="login-header">
+            <h2>Welcome Back</h2>
+            <p>Please fill in your credentials to login.</p>
+        </div>
 
         <?php if (!empty($login_err)): ?>
             <div class="alert alert-danger"><?php echo $login_err; ?></div>

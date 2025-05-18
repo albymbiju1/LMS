@@ -54,9 +54,52 @@ if($stmt = mysqli_prepare($conn, $sql)){
     <title>Quizzes - LMS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
     <style>
         .wrapper { width: 1200px; margin: 0 auto; padding: 20px; }
-        .quiz-card { margin-bottom: 20px; }
+        .quiz-card {
+            transition: var(--transition);
+            border-left: 4px solid var(--warning-color);
+            margin-bottom: 1.5rem;
+        }
+        .quiz-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .quiz-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        .status-available {
+            background-color: var(--success-color);
+            color: white;
+        }
+        .status-completed {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .status-expired {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        .quiz-info {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .quiz-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary-color);
+        }
         .attempts { color: #6c757d; }
     </style>
 </head>
