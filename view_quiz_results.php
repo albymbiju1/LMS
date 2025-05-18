@@ -44,8 +44,10 @@ if ($quiz['instructor_id'] != $user_id) {
     exit();
 }
 
-// Get all quiz attempts for this quiz
-$sql = "SELECT qa.*, u.username, u.full_name 
+// Get all quiz attempts for this quiz with time_taken calculation
+$sql = "SELECT qa.*, 
+               TIMESTAMPDIFF(MINUTE, qa.started_at, qa.completed_at) AS time_taken,
+               u.username, u.full_name 
         FROM quiz_attempts qa 
         JOIN users u ON qa.user_id = u.user_id 
         WHERE qa.quiz_id = ? 
@@ -132,23 +134,22 @@ $attempts = mysqli_stmt_get_result($stmt);
                                 <th>Attempted At</th>
                                 <th>Score</th>
                                 <th>Time Taken</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
-                        <>
-<?php while ($attempt = mysqli_fetch_assoc($attempts)): ?>
-    <tr>
-        <td><?php echo htmlspecialchars($attempt['full_name'] ?: $attempt['username']); ?></td>
-        <td><?php echo htmlspecialchars($attempt['username']); ?></td>
-        <td><?php echo date('F j, Y g:i A', strtotime($attempt['attempted_at'])); ?></td>
-        <td><?php echo htmlspecialchars($attempt['score']); ?>%</td>
-        <td><?php echo htmlspecialchars($attempt['time_taken']); ?> minutes</td>
-        <td>
-            <a href="view_quiz_attempt.php?id=<?php echo $attempt['attempt_id']; ?>" class="btn btn-primary btn-sm">View Details</a>
-        </td>
-    </tr>
-<?php endwhile; ?>
-
+                        <tbody>
+                            <?php while ($attempt = mysqli_fetch_assoc($attempts)): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($attempt['full_name'] ?: $attempt['username']); ?></td>
+                                    <td><?php echo htmlspecialchars($attempt['username']); ?></td>
+                                    <td><?php echo date('F j, Y g:i A', strtotime($attempt['completed_at'])); ?></td>
+                                    <td><?php echo htmlspecialchars($attempt['score']); ?>%</td>
+                                    <td>
+                                        <?php echo isset($attempt['time_taken']) ? htmlspecialchars($attempt['time_taken']) . ' minutes' : 'N/A'; ?>
+                                    </td>
+                    
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
                         </tbody>
                     </table>
                 </div>
@@ -158,4 +159,4 @@ $attempts = mysqli_stmt_get_result($stmt);
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html> 
+</html>

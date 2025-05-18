@@ -150,7 +150,8 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
                         <?php if (empty($modules)): ?><p>No modules available.</p><?php else: ?>
                         <div class="list-group">
                             <?php foreach ($modules as $m): ?>
-                            <a href="module.php?id=<?php echo $m['module_id']; ?>" class="list-group-item list-group-item-action">
+                                <a href="view_module.php?module_id=<?php echo $m['module_id']; ?>" class="list-group-item list-group-item-action">
+
                                 <h6 class="mb-1"><?php echo htmlspecialchars($m['title']); ?></h6>
                                 <p class="mb-1"><?php echo htmlspecialchars($m['description']); ?></p>
                             </a>
@@ -172,7 +173,7 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
                         <?php if (empty($assignments)): ?><p>No assignments available.</p><?php else: ?>
                         <div class="list-group">
                             <?php foreach ($assignments as $a): ?>
-                            <a href="assignment.php?id=<?php echo $a['assignment_id']; ?>" class="list-group-item list-group-item-action">
+                            <a href="view_assignment.php?id=<?php echo $a['assignment_id']; ?>" class="list-group-item list-group-item-action">
                                 <h6 class="mb-1"><?php echo htmlspecialchars($a['title']); ?></h6>
                                 <small>Due: <?php echo date('M d, Y', strtotime($a['due_date'])); ?></small>
                             </a>
@@ -194,7 +195,7 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
                         <?php if (empty($quizzes)): ?><p>No quizzes available.</p><?php else: ?>
                         <div class="list-group">
                             <?php foreach ($quizzes as $q): ?>
-                            <a href="quiz.php?id=<?php echo $q['quiz_id']; ?>" class="list-group-item list-group-item-action">
+                            <a href="view_quiz.php?id=<?php echo $q['quiz_id']; ?>" class="list-group-item list-group-item-action">
                                 <h6 class="mb-1"><?php echo htmlspecialchars($q['title']); ?></h6>
                             </a>
                             <?php endforeach; ?>

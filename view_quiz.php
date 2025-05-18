@@ -48,11 +48,19 @@ $questions = mysqli_stmt_get_result($stmt);
 mysqli_stmt_close($stmt);
 
 // Get user's attempt if exists
-$sql = "SELECT * FROM quiz_attempts WHERE quiz_id = ? AND student_id = ? ORDER BY attempted_at DESC LIMIT 1";
+$sql = "SELECT * FROM quiz_attempts WHERE quiz_id = ? AND user_id = ? ORDER BY completed_at DESC LIMIT 1";
 $stmt = mysqli_prepare($conn, $sql);
 mysqli_stmt_bind_param($stmt, "ii", $quiz_id, $user_id);
 mysqli_stmt_execute($stmt);
 $attempt = mysqli_stmt_get_result($stmt)->fetch_assoc();
+mysqli_stmt_close($stmt);
+
+// Get user's attempt count
+$sql = "SELECT COUNT(*) as attempt_count FROM quiz_attempts WHERE quiz_id = ? AND user_id = ?";
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_bind_param($stmt, "ii", $quiz_id, $user_id);
+mysqli_stmt_execute($stmt);
+$attempt_count = mysqli_stmt_get_result($stmt)->fetch_assoc()['attempt_count'];
 mysqli_stmt_close($stmt);
 
 // Get all attempts if instructor
@@ -69,6 +77,27 @@ if ($role === 'instructor' && $quiz['instructor_id'] === $user_id) {
     $result = mysqli_stmt_get_result($stmt);
     while ($row = mysqli_fetch_assoc($result)) {
         $all_attempts[] = $row;
+    }
+    mysqli_stmt_close($stmt);
+}
+
+// Get all participants if instructor
+$participants = [];
+if ($role === 'instructor' && $quiz['instructor_id'] === $user_id) {
+    $sql = "SELECT u.user_id, u.username, u.full_name, 
+            COUNT(qa.attempt_id) as attempt_count,
+            MAX(qa.score) as best_score
+            FROM enrollments e
+            JOIN users u ON e.user_id = u.user_id
+            LEFT JOIN quiz_attempts qa ON qa.quiz_id = ? AND qa.user_id = u.user_id
+            WHERE e.course_id = ?
+            GROUP BY u.user_id";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "ii", $quiz_id, $quiz['course_id']);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    while ($row = mysqli_fetch_assoc($result)) {
+        $participants[] = $row;
     }
     mysqli_stmt_close($stmt);
 }
@@ -141,20 +170,26 @@ if ($role === 'instructor' && $quiz['instructor_id'] === $user_id) {
                 <p class="mb-0">Course: <?php echo htmlspecialchars($quiz['course_title']); ?></p>
             </div>
             <div class="card-body">
-                <div class="mb-4">
-                    <h5>Quiz Description</h5>
-                    <p><?php echo nl2br(htmlspecialchars($quiz['description'])); ?></p>
-                    <p><strong>Time Limit:</strong> <?php echo htmlspecialchars($quiz['time_limit']); ?> minutes</p>
-                    <p><strong>Passing Score:</strong> <?php echo htmlspecialchars($quiz['passing_score']); ?>%</p>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Quiz Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Attempts:</strong> <?php echo $attempt_count; ?> / 5</p>
+                        <?php if ($attempt_count >= 5): ?>
+                            <div class="alert alert-warning">
+                                You have reached the maximum number of attempts (5) for this quiz.
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
                 <?php if ($role === 'student'): ?>
                     <?php if ($attempt): ?>
                         <div class="alert alert-success">
                             <h5>Quiz Status: Completed</h5>
-                            <p><strong>Last Attempt:</strong> <?php echo date('F j, Y g:i A', strtotime($attempt['attempted_at'])); ?></p>
+                            <p><strong>Last Attempt:</strong> <?php echo date('F j, Y g:i A', strtotime($attempt['completed_at'])); ?></p>
                             <p><strong>Score:</strong> <?php echo htmlspecialchars($attempt['score']); ?>%</p>
-                            <p><strong>Time Taken:</strong> <?php echo htmlspecialchars($attempt['time_taken']); ?> minutes</p>
                             <a href="quiz_results.php?id=<?php echo $quiz_id; ?>" class="btn btn-primary">View Detailed Results</a>
                         </div>
                     <?php else: ?>
@@ -200,6 +235,38 @@ if ($role === 'instructor' && $quiz['instructor_id'] === $user_id) {
                             </div>
                         <?php endif; ?>
                     </div>
+                <?php endif; ?>
+
+                <?php if ($role === 'instructor' && $quiz['instructor_id'] === $user_id): ?>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Quiz Participants</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Username</th>
+                                        <th>Attempts</th>
+                                        <th>Best Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($participants as $participant): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($participant['full_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($participant['username']); ?></td>
+                                        <td><?php echo htmlspecialchars($participant['attempt_count']); ?></td>
+                                        <td><?php echo $participant['best_score'] ? htmlspecialchars($participant['best_score']) . '%' : 'No attempts'; ?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 <?php endif; ?>
             </div>
         </div>

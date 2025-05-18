@@ -1,140 +1,119 @@
 <?php
 session_start();
-require_once "config/database.php";
 
-// Check if user is logged in
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
+// 1) Ensure user is logged in
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("Location: login.php");
     exit;
 }
 
-// Check if module_id is provided
-if (!isset($_GET['id'])) {
-    $_SESSION['error'] = "Module ID is required";
+require_once "config/database.php";
+
+// 2) Validate module_id parameter; redirect to dashboard if missing/invalid
+if (empty($_GET['module_id']) || !ctype_digit($_GET['module_id'])) {
     header("Location: index.php");
-    exit();
+    exit;
 }
+$module_id = intval($_GET['module_id']);
 
-$module_id = (int)$_GET['id'];
-$user_id = (int)$_SESSION["id"];
-
-// Check if module exists and user is enrolled in the course
-$sql = "SELECT m.*, c.title as course_title, c.course_id 
-        FROM modules m 
-        JOIN courses c ON m.course_id = c.course_id 
-        JOIN enrollments e ON c.course_id = e.course_id 
-        WHERE m.module_id = ? AND e.user_id = ?";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "ii", $module_id, $user_id);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-
-if (mysqli_num_rows($result) === 0) {
-    $_SESSION['error'] = "Module not found or you are not enrolled in this course";
+// 3) Fetch module info (including course_id if you later want it)
+$sqlModule = "
+    SELECT m.course_id,
+           m.title       AS module_title,
+           m.description
+    FROM modules m
+    WHERE m.module_id = ?
+";
+if (!($stmt = mysqli_prepare($conn, $sqlModule))) {
     header("Location: index.php");
-    exit();
+    exit;
 }
-
-$module = mysqli_fetch_assoc($result);
-mysqli_stmt_close($stmt);
-
-// Get module content
-$sql = "SELECT * FROM module_content WHERE module_id = ? ORDER BY content_order ASC";
-$stmt = mysqli_prepare($conn, $sql);
 mysqli_stmt_bind_param($stmt, "i", $module_id);
 mysqli_stmt_execute($stmt);
-$content = mysqli_stmt_get_result($stmt);
-?>
+$res = mysqli_stmt_get_result($stmt);
+$module = mysqli_fetch_assoc($res);
+mysqli_stmt_close($stmt);
 
+if (!$module) {
+    // Module not found
+    header("Location: index.php");
+    exit;
+}
+
+// 4) Fetch its content items
+$sqlContent = "
+    SELECT ci.content_type,
+           ci.title,
+           ci.file_path
+    FROM content_items ci
+    JOIN lessons l ON ci.lesson_id = l.lesson_id
+    WHERE l.module_id = ?
+    ORDER BY ci.created_at
+";
+if (!($stmt = mysqli_prepare($conn, $sqlContent))) {
+    header("Location: index.php");
+    exit;
+}
+mysqli_stmt_bind_param($stmt, "i", $module_id);
+mysqli_stmt_execute($stmt);
+$res = mysqli_stmt_get_result($stmt);
+$items = mysqli_fetch_all($res, MYSQLI_ASSOC);
+mysqli_stmt_close($stmt);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Module - LMS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Module: <?= htmlspecialchars($module['module_title']) ?></title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .wrapper { max-width: 800px; margin: 30px auto; }
+    .content-item { margin-bottom: 15px; }
+    .content-item h6 { margin-bottom: 5px; }
+    .content-type { font-size: 0.9em; color: #6c757d; }
+  </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">LMS</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="assignments.php">Assignments</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="quizzes.php">Quizzes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="grades.php">Grades</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="profile.php">Profile</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="index.php">LMS</a>
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="index.php">← Back to Dashboard</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
+    </ul>
+  </div>
+</nav>
 
-    <div class="container mt-4">
-        <?php if (isset($_SESSION['error'])): ?>
-            <div class="alert alert-danger">
-                <?php 
-                echo $_SESSION['error'];
-                unset($_SESSION['error']);
-                ?>
-            </div>
+<div class="wrapper">
+  <h2><?= htmlspecialchars($module['module_title']) ?></h2>
+  <p><?= nl2br(htmlspecialchars($module['description'])) ?></p>
+
+  <?php if (empty($items)): ?>
+    <div class="alert alert-info">No content available for this module.</div>
+  <?php else: ?>
+    <?php foreach ($items as $it): ?>
+      <div class="content-item">
+        <h6><?= htmlspecialchars($it['title']) ?></h6>
+        <div class="content-type"><?= ucfirst($it['content_type']) ?></div>
+
+        <?php if ($it['content_type'] === 'video' || $it['content_type'] === 'document'): ?>
+          <a href="<?= htmlspecialchars($it['file_path']) ?>" target="_blank">
+            View <?= $it['content_type'] === 'video' ? 'Video' : 'Document' ?>
+          </a>
+
+        <?php elseif ($it['content_type'] === 'link'): ?>
+          <a href="<?= htmlspecialchars($it['file_path']) ?>" target="_blank">External Link</a>
+
+        <?php else: /* text fallback */ ?>
+          <p><?= nl2br(htmlspecialchars($it['file_path'])) ?></p>
         <?php endif; ?>
-
-        <div class="card">
-            <div class="card-header">
-                <h4><?php echo htmlspecialchars($module['title']); ?></h4>
-                <p class="mb-0">Course: <?php echo htmlspecialchars($module['course_title']); ?></p>
-            </div>
-            <div class="card-body">
-                <div class="mb-4">
-                    <h5>Module Description</h5>
-                    <p><?php echo nl2br(htmlspecialchars($module['description'])); ?></p>
-                </div>
-
-                <div class="module-content">
-                    <h5>Module Content</h5>
-                    <?php if (mysqli_num_rows($content) === 0): ?>
-                        <p>No content available for this module.</p>
-                    <?php else: ?>
-                        <?php while ($item = mysqli_fetch_assoc($content)): ?>
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h6><?php echo htmlspecialchars($item['title']); ?></h6>
-                                    <p><?php echo nl2br(htmlspecialchars($item['content'])); ?></p>
-                                    <?php if ($item['file_path']): ?>
-                                        <a href="<?php echo htmlspecialchars($item['file_path']); ?>" class="btn btn-primary btn-sm" target="_blank">Download Resource</a>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        <?php endwhile; ?>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-3">
-            <a href="course.php?id=<?php echo $module['course_id']; ?>" class="btn btn-secondary">Back to Course</a>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+      </div>
+    <?php endforeach; ?>
+  <?php endif; ?>
+</div>
 </body>
-</html> 
+</html>
