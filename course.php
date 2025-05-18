@@ -210,7 +210,7 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
                     <div class="card-body">
                         <p><strong>Created:</strong> <?php echo date('M d, Y', strtotime($course['created_at'])); ?></p>
                         <?php if ($role === 'student'): ?>
-                        <a href="enroll.php?course_id=<?php echo $course_id; ?>" class="btn btn-primary btn-block">Enroll in Course</a>
+                        <a href="unenroll.php?course_id=<?php echo $course_id; ?>" class="btn btn-danger btn-block" onclick="return confirm('Are you sure you want to unenroll from this course?')">Unenroll from Course</a>
                         <?php endif; ?>
                     </div>
                 </div>

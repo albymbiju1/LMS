@@ -15,9 +15,12 @@ $role    = $_SESSION["role"];
 
 // Build SQL based on role
 if ($role === "student") {
-    $sql = "SELECT c.* FROM courses c
-            INNER JOIN enrollments e ON c.course_id = e.course_id
-            WHERE e.user_id = ?";
+    $sql = "SELECT c.*, 
+            CASE WHEN e.user_id IS NOT NULL THEN 1 ELSE 0 END as is_enrolled,
+            u.full_name as instructor_name
+            FROM courses c 
+            LEFT JOIN enrollments e ON c.course_id = e.course_id AND e.user_id = ?
+            LEFT JOIN users u ON c.instructor_id = u.user_id";
 } elseif ($role === "instructor") {
     $sql = "SELECT * FROM courses WHERE instructor_id = ?";
 } else {
@@ -93,6 +96,30 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
     <div class="wrapper">
         <h2>Welcome, <?php echo htmlspecialchars($_SESSION["username"]); ?>!</h2>
         
+        <?php if(isset($_SESSION["message"])): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php 
+                    echo $_SESSION["message"];
+                    unset($_SESSION["message"]);
+                ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <?php endif; ?>
+
+        <?php if(isset($_SESSION["error"])): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <?php 
+                    echo $_SESSION["error"];
+                    unset($_SESSION["error"]);
+                ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <?php endif; ?>
+        
         <div class="row mt-4">
             <div class="col-md-8">
                 <h3>Your Courses</h3>
@@ -106,7 +133,18 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo htmlspecialchars($course["title"]); ?></h5>
                                 <p class="card-text"><?php echo htmlspecialchars($course["description"]); ?></p>
-                                <a href="course.php?id=<?php echo $course["course_id"]; ?>" class="btn btn-primary">View Course</a>
+                                <?php if (isset($course["instructor_name"])): ?>
+                                    <p class="card-text"><small class="text-muted">Instructor: <?php echo htmlspecialchars($course["instructor_name"]); ?></small></p>
+                                <?php endif; ?>
+                                <?php if ($role === "student"): ?>
+                                    <?php if (isset($course["is_enrolled"]) && $course["is_enrolled"]): ?>
+                                        <a href="course.php?id=<?php echo $course["course_id"]; ?>" class="btn btn-primary">View Course</a>
+                                    <?php else: ?>
+                                        <a href="enroll.php?course_id=<?php echo $course["course_id"]; ?>" class="btn btn-success">Enroll Now</a>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <a href="course.php?id=<?php echo $course["course_id"]; ?>" class="btn btn-primary">View Course</a>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
