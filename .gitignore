@@ -1,8 +1,0 @@
-# Ignore files inside uploads/assignments but keep the folder
-/uploads/assignments/*
-!/uploads/assignments/.gitkeep
-
-# Ignore files inside uploads/modules but keep the folder
-/uploads/modules/*
-!/uploads/modules/.gitkeep
-

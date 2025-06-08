@@ -84,43 +84,150 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grade Assignment - LMS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2A3F54;
+            --secondary-color: #1ABB9C;
+            --border-radius: 8px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8f9fa;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+            box-shadow: var(--box-shadow);
+        }
+
+        .wrapper {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .grade-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+
+        .grade-form {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .form-control {
+            border: 2px solid #eee;
+            border-radius: var(--border-radius);
+            padding: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(42, 63, 84, 0.25);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 63, 84, 0.2);
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.8) !important;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            transform: translateX(3px);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="index.php">LMS</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php">Dashboard</a>
+                        <a class="nav-link" href="index.php">
+                            <i class="fas fa-home"></i>Dashboard
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="assignments.php">Assignments</a>
+                        <a class="nav-link" href="assignments.php">
+                            <i class="fas fa-tasks"></i>Assignments
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="quizzes.php">Quizzes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="grades.php">Grades</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="profile.php">Profile</a>
+                        <a class="nav-link" href="quizzes.php">
+                            <i class="fas fa-question-circle"></i>Quizzes
+                        </a>
                     </li>
                 </ul>
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Logout</a>
+                        <a class="nav-link" href="profile.php">
+                            <i class="fas fa-user-circle"></i>Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">
+                            <i class="fas fa-sign-out-alt"></i>Logout
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <div class="wrapper">
         <?php if (isset($_SESSION['error'])): ?>
             <div class="alert alert-danger">
                 <?php 
@@ -130,51 +237,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
 
-        <div class="card">
-            <div class="card-header">
-                <h4>Grade Assignment: <?php echo htmlspecialchars($submission['assignment_title']); ?></h4>
-                <p class="mb-0">Course: <?php echo htmlspecialchars($submission['course_title']); ?></p>
-                <p class="mb-0">Student: <?php echo htmlspecialchars($submission['student_name']); ?></p>
-            </div>
-            <div class="card-body">
-                <div class="mb-4">
-                    <?php if ($submission['file_path']): ?>
-                        <p>
-                            <strong>Attached File:</strong>
-                            <a href="<?php echo htmlspecialchars($submission['file_path']); ?>" target="_blank">
-                                Download File
-                            </a>
-                        </p>
-                    <?php endif; ?>
+        <div class="grade-header">
+            <h4><i class="fas fa-check-circle"></i> Grade Assignment: <?php echo htmlspecialchars($submission['assignment_title']); ?></h4>
+            <p class="mb-0"><i class="fas fa-book"></i> Course: <?php echo htmlspecialchars($submission['course_title']); ?></p>
+        </div>
 
-                    <p>
-                        <strong>Submitted:</strong>
-                        <?php echo date('F j, Y g:i A', strtotime($submission['submitted_at'])); ?>
-                    </p>
+        <div class="grade-form">
+            <div class="student-info">
+                <div class="student-avatar">
+                    <?php echo strtoupper(substr($submission['student_name'], 0, 1)); ?>
+                </div>
+                <div>
+                    <h5 class="mb-0"><?php echo htmlspecialchars($submission['student_name']); ?></h5>
+                </div>
+            </div>
+
+            <?php if ($submission['file_path']): ?>
+                <div class="mb-4">
+                    <a href="<?php echo htmlspecialchars($submission['file_path']); ?>" target="_blank" class="btn btn-info">
+                        <i class="fas fa-download"></i> Download Submission
+                    </a>
+                </div>
+            <?php endif; ?>
+
+            <form action="grade_assignment.php?submission_id=<?php echo $submission_id; ?>" method="POST">
+                <div class="form-group">
+                    <label><i class="fas fa-star"></i> Grade (0-100)</label>
+                    <input type="number" class="form-control" id="grade" name="grade" 
+                           min="0" max="100" step="0.1" required
+                           value="<?php echo $submission['grade'] ?? ''; ?>">
                 </div>
 
-                <form action="grade_assignment.php?submission_id=<?php echo $submission_id; ?>" method="POST">
-                    <div class="mb-3">
-                        <label for="grade" class="form-label">Grade (0-100)</label>
-                        <input type="number" class="form-control" id="grade" name="grade" 
-                               min="0" max="100" step="0.1" required
-                               value="<?php echo $submission['grade'] ?? ''; ?>">
-                    </div>
+                <div class="form-group">
+                    <label><i class="fas fa-comment"></i> Feedback</label>
+                    <textarea class="form-control" id="feedback" name="feedback" rows="5"><?php 
+                        echo htmlspecialchars($submission['feedback'] ?? ''); 
+                    ?></textarea>
+                </div>
 
-                    <div class="mb-3">
-                        <label for="feedback" class="form-label">Feedback</label>
-                        <textarea class="form-control" id="feedback" name="feedback" rows="5"><?php 
-                            echo htmlspecialchars($submission['feedback'] ?? ''); 
-                        ?></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Submit Grade</button>
-                    <a href="assignments.php" class="btn btn-secondary">Cancel</a>
-                </form>
-            </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Submit Grade
+                    </button>
+                    <a href="assignments.php" class="btn btn-secondary ml-2">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+</html> 
+</html> 
+</html> 
 </html> 

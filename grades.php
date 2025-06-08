@@ -13,18 +13,18 @@ $grades  = [];
 
 if ($role === "student") {
     //
-    // 1) Get each assignment’s latest grade
+    // 1) Get each assignment's latest grade
     //
     $sql_assign = "
         SELECT 
             c.title        AS course_title,
             a.title        AS item_title,
             (
-                SELECT grade_value
-                FROM grades g
-                WHERE g.user_id     = ?
-                  AND g.assignment_id = a.assignment_id
-                ORDER BY graded_at DESC
+                SELECT grade
+                FROM submissions s
+                WHERE s.student_id = ?
+                  AND s.assignment_id = a.assignment_id
+                ORDER BY submitted_at DESC
                 LIMIT 1
             )               AS grade_value,
             'Assignment'   AS item_type
@@ -35,7 +35,7 @@ if ($role === "student") {
     ";
 
     //
-    // 2) Get each quiz’s latest grade
+    // 2) Get each quiz's latest grade
     //
     $sql_quiz = "
         SELECT 
@@ -81,42 +81,134 @@ else {
   <meta charset="UTF-8">
   <title>Grades - LMS</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    .wrapper { max-width: 900px; margin: 30px auto; }
-    .grade { font-weight: bold; }
-    .grade-a { color: #28a745; }
-    .grade-b { color: #17a2b8; }
-    .grade-c { color: #ffc107; }
-    .grade-d { color: #fd7e14; }
-    .grade-f { color: #dc3545; }
-    .not-attempted { color: #6c757d; }
+    :root {
+      --primary-color: #2A3F54;
+      --secondary-color: #1ABB9C;
+      --accent-color: #337AB7;
+      --border-radius: 8px;
+      --box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #f8f9fa;
+    }
+
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+      box-shadow: var(--box-shadow);
+    }
+
+    .wrapper {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 20px;
+    }
+
+    .grade-card {
+      background: white;
+      border: none;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      margin-bottom: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .grade-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+
+    .grade-badge {
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .grade-a { background: rgba(40, 167, 69, 0.15); color: #28a745; }
+    .grade-b { background: rgba(23, 162, 184, 0.15); color: #17a2b8; }
+    .grade-c { background: rgba(255, 193, 7, 0.15); color: #ffc107; }
+    .grade-d { background: rgba(253, 126, 20, 0.15); color: #fd7e14; }
+    .grade-f { background: rgba(220, 53, 69, 0.15); color: #dc3545; }
+    .not-attempted { background: rgba(108, 117, 125, 0.15); color: #6c757d; }
+
+    .nav-link {
+      color: rgba(255,255,255,0.8) !important;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link:hover {
+      color: white !important;
+      transform: translateX(3px);
+    }
+
+    .course-header {
+      border-bottom: 2px solid rgba(0,0,0,0.05);
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
   </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">LMS</a>
-  <div class="collapse navbar-collapse">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item"><a class="nav-link" href="index.php">Dashboard</a></li>
-      <li class="nav-item"><a class="nav-link" href="assignments.php">Assignments</a></li>
-      <li class="nav-item"><a class="nav-link" href="quizzes.php">Quizzes</a></li>
-      <li class="nav-item active"><a class="nav-link" href="grades.php">Grades</a></li>
-    </ul>
-    <ul class="navbar-nav">
-      <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
-      <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
-    </ul>
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">LMS</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="index.php">
+            <i class="fas fa-home"></i>Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="assignments.php">
+            <i class="fas fa-tasks"></i>Assignments
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="quizzes.php">
+            <i class="fas fa-question-circle"></i>Quizzes
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="grades.php">
+            <i class="fas fa-chart-line"></i>Grades
+          </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="profile.php">
+            <i class="fas fa-user-circle"></i>Profile
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="logout.php">
+            <i class="fas fa-sign-out-alt"></i>Logout
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
 
 <div class="wrapper">
-  <h2>Grades</h2>
+  <h2 class="mb-4" style="color: var(--primary-color);">Academic Progress</h2>
 
   <?php if (empty($grades)): ?>
-    <div class="alert alert-info">No grades available.</div>
+    <div class="alert alert-info">No grades available yet.</div>
   <?php else: ?>
     <?php
-      // group by course
+      // Group by course (existing logic)
       $by_course = [];
       foreach ($grades as $r) {
         $by_course[$r['course_title']][] = $r;
@@ -124,37 +216,49 @@ else {
     ?>
 
     <?php foreach ($by_course as $course => $items): ?>
-      <div class="card mb-4">
-        <div class="card-header">
-          <h5><?= htmlspecialchars($course) ?></h5>
-        </div>
+      <div class="grade-card">
         <div class="card-body">
-          <?php foreach ($items as $row): ?>
-            <div class="mb-3">
-              <strong><?= htmlspecialchars($row['item_type']) ?>:</strong>
-              <?= htmlspecialchars($row['item_title']) ?><br>
-
-              <?php if ($row['grade_value'] !== null): 
-                $score = floatval($row['grade_value']);
-                if      ($score >= 90) $cl = 'grade-a';
-                elseif  ($score >= 80) $cl = 'grade-b';
-                elseif  ($score >= 70) $cl = 'grade-c';
-                elseif  ($score >= 60) $cl = 'grade-d';
-                else                   $cl = 'grade-f';
-              ?>
-                <span class="grade <?= $cl ?>">
-                  <?= number_format($score, 1) ?>%
-                </span>
-              <?php else: ?>
-                <span class="not-attempted">Not Attempted</span>
-              <?php endif; ?>
-            </div>
-          <?php endforeach; ?>
+          <div class="course-header">
+            <h5><?= htmlspecialchars($course) ?></h5>
+          </div>
+          
+          <div class="row">
+            <?php foreach ($items as $row): ?>
+              <div class="col-md-6 mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <div class="text-muted small mb-1">
+                      <?= htmlspecialchars($row['item_type']) ?>
+                    </div>
+                    <h6 class="mb-0"><?= htmlspecialchars($row['item_title']) ?></h6>
+                  </div>
+                  
+                  <?php if ($row['grade_value'] !== null): 
+                    $score = floatval($row['grade_value']);
+                    if ($score >= 90) $cl = 'grade-a';
+                    elseif ($score >= 80) $cl = 'grade-b';
+                    elseif ($score >= 70) $cl = 'grade-c';
+                    elseif ($score >= 60) $cl = 'grade-d';
+                    else $cl = 'grade-f';
+                  ?>
+                    <div class="grade-badge <?= $cl ?>">
+                      <i class="fas fa-percent"></i>
+                      <?= number_format($score, 1) ?>%
+                    </div>
+                  <?php else: ?>
+                    <div class="grade-badge not-attempted">
+                      <i class="fas fa-clock"></i>
+                      Pending
+                    </div>
+                  <?php endif; ?>
+                </div>
+              </div>
+            <?php endforeach; ?>
+          </div>
         </div>
       </div>
     <?php endforeach; ?>
   <?php endif; ?>
-
 </div>
 </body>
 </html>

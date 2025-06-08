@@ -99,8 +99,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Submit Assignment - LMS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
     <style>
+        :root {
+            --primary-color: #2A3F54;
+            --secondary-color: #1ABB9C;
+            --border-radius: 8px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8f9fa;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+            box-shadow: var(--box-shadow);
+        }
+
+        .wrapper {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
         .submit-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
@@ -108,6 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: var(--border-radius);
             margin-bottom: 2rem;
         }
+
         .assignment-info {
             background: white;
             padding: 2rem;
@@ -115,6 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             box-shadow: var(--box-shadow);
             margin-bottom: 2rem;
         }
+
         .due-date {
             display: inline-flex;
             align-items: center;
@@ -124,6 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: rgba(255, 255, 255, 0.2);
             margin-top: 1rem;
         }
+
         .upload-section {
             background: #f8f9fa;
             padding: 2rem;
@@ -132,15 +158,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             text-align: center;
             transition: var(--transition);
         }
+
         .upload-section:hover {
             border-color: var(--primary-color);
             background: #fff;
         }
+
         .upload-icon {
             font-size: 3rem;
             color: var(--primary-color);
             margin-bottom: 1rem;
         }
+
         .file-preview {
             margin-top: 1rem;
             padding: 1rem;
@@ -148,9 +177,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: var(--border-radius);
             display: none;
         }
+
         .file-preview.active {
             display: block;
         }
+
         .file-info {
             display: flex;
             align-items: center;
@@ -159,47 +190,98 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: #f8f9fa;
             border-radius: var(--border-radius);
         }
+
         .file-icon {
             font-size: 1.5rem;
             color: var(--primary-color);
         }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 63, 84, 0.2);
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.8) !important;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            transform: translateX(3px);
+        }
+
+        .alert {
+            border-radius: var(--border-radius);
+            border: none;
+            box-shadow: var(--box-shadow);
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #dc3545, #f72a3f);
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="index.php">LMS</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php">Dashboard</a>
+                        <a class="nav-link" href="index.php">
+                            <i class="fas fa-home"></i>Dashboard
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="assignments.php">Assignments</a>
+                        <a class="nav-link" href="assignments.php">
+                            <i class="fas fa-tasks"></i>Assignments
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="quizzes.php">Quizzes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="grades.php">Grades</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="profile.php">Profile</a>
+                        <a class="nav-link" href="quizzes.php">
+                            <i class="fas fa-question-circle"></i>Quizzes
+                        </a>
                     </li>
                 </ul>
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Logout</a>
+                        <a class="nav-link" href="profile.php">
+                            <i class="fas fa-user-circle"></i>Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">
+                            <i class="fas fa-sign-out-alt"></i>Logout
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <div class="wrapper">
         <?php if (isset($_SESSION['error'])): ?>
             <div class="alert alert-danger">
                 <?php 
@@ -218,32 +300,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
 
-        <div class="card">
-            <div class="card-header">
-                <h4>Submit Assignment: <?php echo htmlspecialchars($assignment['title']); ?></h4>
-                <p class="mb-0">Course: <?php echo htmlspecialchars($assignment['course_title']); ?></p>
+        <div class="submit-header">
+            <h2><i class="fas fa-upload"></i> Submit Assignment</h2>
+            <p class="mb-0">Course: <?php echo htmlspecialchars($assignment['course_title']); ?></p>
+            <div class="due-date">
+                <i class="fas fa-clock"></i>
+                Due: <?php echo date('F j, Y g:i A', strtotime($assignment['due_date'])); ?>
             </div>
-            <div class="card-body">
-                <div class="mb-4">
-                    <h5>Assignment Description</h5>
-                    <p><?php echo nl2br(htmlspecialchars($assignment['description'])); ?></p>
-                    <p><strong>Due Date:</strong> <?php echo date('F j, Y g:i A', strtotime($assignment['due_date'])); ?></p>
+        </div>
+
+        <div class="assignment-info">
+            <h4><i class="fas fa-file-alt"></i> Assignment Details</h4>
+            <p><?php echo nl2br(htmlspecialchars($assignment['description'])); ?></p>
+        </div>
+
+        <div class="upload-section">
+            <form action="submit_assignment.php?id=<?php echo $assignment_id; ?>" method="POST" enctype="multipart/form-data">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h4>Upload Your Submission</h4>
+                <p class="text-muted">Drag and drop your file here or click to browse</p>
+                
+                <div class="form-group">
+                    <input type="file" class="form-control-file" id="submission_file" name="submission_file" required>
+                    <small class="form-text text-muted">
+                        <i class="fas fa-info-circle"></i> Maximum file size: 10MB
+                    </small>
                 </div>
 
-                <form action="submit_assignment.php?id=<?php echo $assignment_id; ?>" method="POST" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <label for="submission_file" class="form-label">Upload File</label>
-                        <input type="file" class="form-control" id="submission_file" name="submission_file" required>
-                        <div class="form-text">Maximum file size: 10MB</div>
+                <div class="file-preview" id="filePreview">
+                    <div class="file-info">
+                        <i class="fas fa-file file-icon"></i>
+                        <span id="fileName"></span>
                     </div>
+                </div>
 
-                    <button type="submit" class="btn btn-primary">Submit Assignment</button>
-                    <a href="assignments.php" class="btn btn-secondary">Cancel</a>
-                </form>
-            </div>
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Submit Assignment
+                    </button>
+                    <a href="assignments.php" class="btn btn-secondary ml-2">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // File preview functionality
+        document.getElementById('submission_file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('filePreview').classList.add('active');
+            } else {
+                document.getElementById('filePreview').classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html> 
+</html> 
+

@@ -108,90 +108,178 @@ if($role === "instructor"){
     <meta charset="UTF-8">
     <title>Profile - LMS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .profile-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 2rem;
-            border-radius: var(--border-radius);
-            margin-bottom: 2rem;
+        :root {
+            --primary-color: #2A3F54;
+            --secondary-color: #1ABB9C;
+            --accent-color: #337AB7;
+            --border-radius: 8px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
         }
-        .profile-avatar {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 4px solid white;
-            margin-bottom: 1rem;
-            object-fit: cover;
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8f9fa;
         }
-        .profile-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: var(--border-radius);
-            text-align: center;
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
             box-shadow: var(--box-shadow);
         }
-        .stat-card i {
-            font-size: 2rem;
-            color: var(--primary-color);
+
+        .profile-header {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(26, 187, 156, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin: 0 auto 1.5rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        .card-header {
+            background: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(26, 187, 156, 0.15);
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.8) !important;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            transform: translateX(3px);
+        }
+
+        .course-card {
+            background: white;
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
             margin-bottom: 1rem;
+            transition: var(--transition);
         }
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--secondary-color);
-        }
-        .stat-label {
-            color: var(--secondary-color);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+
+        .course-card:hover {
+            transform: translateY(-3px);
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">LMS</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="index.php">Dashboard</a></li>
-                <?php if($role === "instructor"): ?>
-                <li class="nav-item"><a class="nav-link" href="create_course.php">Create Course</a></li>
-                <?php endif; ?>
-                <li class="nav-item active"><a class="nav-link" href="profile.php">Profile</a></li>
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
-            </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">LMS</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php">
+                            <i class="fas fa-home"></i>Dashboard
+                        </a>
+                    </li>
+                    <?php if($role === "instructor"): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="create_course.php">
+                            <i class="fas fa-plus-circle"></i>Create Course
+                        </a>
+                    </li>
+                    <?php endif; ?>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="profile.php">
+                            <i class="fas fa-user"></i>Profile
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">
+                            <i class="fas fa-sign-out-alt"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-    <div class="wrapper">
+    <div class="container" style="max-width: 1200px; margin-top: 2rem;">
         <?php if(!empty($error)): ?>
-            <div class="alert alert-danger"><?php echo $error; ?></div>
+            <div class="alert alert-danger alert-dismissible fade show">
+                <?php echo $error; ?>
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
         <?php endif; ?>
         <?php if(!empty($success)): ?>
-            <div class="alert alert-success"><?php echo $success; ?></div>
+            <div class="alert alert-success alert-dismissible fade show">
+                <?php echo $success; ?>
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
         <?php endif; ?>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">Profile Information</h5>
+                        <h5 class="mb-0"><i class="fas fa-user-circle mr-2"></i>Profile</h5>
                     </div>
                     <div class="card-body">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                             <div class="form-group">
                                 <label>Username</label>
@@ -199,41 +287,53 @@ if($role === "instructor"){
                             </div>
                             <div class="form-group">
                                 <label>Full Name</label>
-                                <input type="text" name="full_name" class="form-control" value="<?php echo htmlspecialchars($full_name); ?>" required>
+                                <input type="text" name="full_name" class="form-control" 
+                                       value="<?php echo htmlspecialchars($full_name); ?>" required>
                             </div>
                             <div class="form-group">
                                 <label>Email</label>
-                                <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($email); ?>" required>
+                                <input type="email" name="email" class="form-control" 
+                                       value="<?php echo htmlspecialchars($email); ?>" required>
                             </div>
                             <div class="form-group">
                                 <label>Role</label>
-                                <input type="text" class="form-control" value="<?php echo htmlspecialchars($role_display); ?>" disabled>
+                                <input type="text" class="form-control" 
+                                       value="<?php echo htmlspecialchars($role_display); ?>" disabled>
                             </div>
-                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fas fa-save mr-2"></i>Update Profile
+                            </button>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-8">
+            <div class="col-lg-8">
                 <?php if($role === "student"): ?>
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">Enrolled Courses</h5>
+                        <h5 class="mb-0"><i class="fas fa-book-open mr-2"></i>Enrolled Courses</h5>
                     </div>
                     <div class="card-body">
                         <?php if(empty($enrolled_courses)): ?>
-                            <p>You are not enrolled in any courses yet.</p>
+                            <div class="alert alert-info">You are not enrolled in any courses yet.</div>
                         <?php else: ?>
-                            <?php foreach($enrolled_courses as $course): ?>
-                            <div class="card course-card">
-                                <div class="card-body">
-                                    <h5 class="card-title"><?php echo htmlspecialchars($course["title"]); ?></h5>
-                                    <p class="card-text"><?php echo htmlspecialchars($course["description"]); ?></p>
-                                    <a href="course.php?id=<?php echo $course["course_id"]; ?>" class="btn btn-primary">View Course</a>
+                            <div class="row">
+                                <?php foreach($enrolled_courses as $course): ?>
+                                <div class="col-md-6">
+                                    <div class="course-card">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><?php echo htmlspecialchars($course["title"]); ?></h5>
+                                            <p class="card-text text-muted"><?php echo htmlspecialchars($course["description"]); ?></p>
+                                            <a href="course.php?id=<?php echo $course["course_id"]; ?>" 
+                                               class="btn btn-primary btn-sm">
+                                               View Course <i class="fas fa-arrow-right ml-2"></i>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
+                                <?php endforeach; ?>
                             </div>
-                            <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -242,21 +342,28 @@ if($role === "instructor"){
                 <?php if($role === "instructor"): ?>
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">Your Courses</h5>
+                        <h5 class="mb-0"><i class="fas fa-chalkboard-teacher mr-2"></i>Your Courses</h5>
                     </div>
                     <div class="card-body">
                         <?php if(empty($instructor_courses)): ?>
-                            <p>You haven't created any courses yet.</p>
+                            <div class="alert alert-info">You haven't created any courses yet.</div>
                         <?php else: ?>
-                            <?php foreach($instructor_courses as $course): ?>
-                            <div class="card course-card">
-                                <div class="card-body">
-                                    <h5 class="card-title"><?php echo htmlspecialchars($course["title"]); ?></h5>
-                                    <p class="card-text"><?php echo htmlspecialchars($course["description"]); ?></p>
-                                    <a href="course.php?id=<?php echo $course["course_id"]; ?>" class="btn btn-primary">View Course</a>
+                            <div class="row">
+                                <?php foreach($instructor_courses as $course): ?>
+                                <div class="col-md-6">
+                                    <div class="course-card">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><?php echo htmlspecialchars($course["title"]); ?></h5>
+                                            <p class="card-text text-muted"><?php echo htmlspecialchars($course["description"]); ?></p>
+                                            <a href="course.php?id=<?php echo $course["course_id"]; ?>" 
+                                               class="btn btn-primary btn-sm">
+                                               View Course <i class="fas fa-arrow-right ml-2"></i>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
+                                <?php endforeach; ?>
                             </div>
-                            <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -269,4 +376,4 @@ if($role === "instructor"){
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-</html> 
+</html>

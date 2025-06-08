@@ -53,94 +53,192 @@ if($stmt = mysqli_prepare($conn, $sql)){
     <meta charset="UTF-8">
     <title>Quizzes - LMS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .wrapper { width: 1200px; margin: 0 auto; padding: 20px; }
-        .quiz-card {
-            transition: var(--transition);
-            border-left: 4px solid var(--warning-color);
-            margin-bottom: 1.5rem;
+        :root {
+            --primary-color: #2A3F54;
+            --secondary-color: #1ABB9C;
+            --accent-color: #337AB7;
+            --border-radius: 8px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
         }
+
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+            box-shadow: var(--box-shadow);
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.8) !important;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            transform: translateX(3px);
+        }
+
+        .wrapper {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .quiz-card {
+            background: white;
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+            border-left: 4px solid var(--secondary-color);
+        }
+
         .quiz-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
         }
-        .quiz-header {
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 63, 84, 0.2);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(51, 122, 183, 0.2);
+        }
+
+        .attempts {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(108, 117, 125, 0.1);
+            border-radius: 20px;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .attempts i {
+            color: var(--secondary-color);
+        }
+
+        .page-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
         }
-        .quiz-status {
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 500;
+
+        .page-header h2 {
+            color: var(--primary-color);
+            margin: 0;
         }
-        .status-available {
-            background-color: var(--success-color);
-            color: white;
-        }
-        .status-completed {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        .status-expired {
-            background-color: var(--danger-color);
-            color: white;
-        }
-        .quiz-info {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .quiz-info-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--secondary-color);
-        }
-        .attempts { color: #6c757d; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">LMS</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="index.php">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="assignments.php">Assignments</a></li>
-                <li class="nav-item active"><a class="nav-link" href="quizzes.php">Quizzes</a></li>
-                <li class="nav-item"><a class="nav-link" href="grades.php">Grades</a></li>
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
-                <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
-            </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.php">LMS</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php">
+                            <i class="fas fa-home"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="assignments.php">
+                            <i class="fas fa-tasks"></i>Assignments
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="quizzes.php">
+                            <i class="fas fa-question-circle"></i>Quizzes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="grades.php">
+                            <i class="fas fa-chart-line"></i>Grades
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.php">
+                            <i class="fas fa-user-circle"></i>Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">
+                            <i class="fas fa-sign-out-alt"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
     <div class="wrapper">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Quizzes</h2>
+        <div class="page-header">
+            <h2><i class="fas fa-question-circle"></i> Quizzes</h2>
             <?php if($role === "instructor"): ?>
-            <a href="create_quiz.php" class="btn btn-primary">Create Quiz</a>
+            <a href="create_quiz.php?course_id=<?php echo $quizzes[0]['course_id'] ?? ''; ?>" class="btn btn-primary">
+                <i class="fas fa-plus-circle"></i> Create Quiz
+            </a>
             <?php endif; ?>
         </div>
 
         <?php if(empty($quizzes)): ?>
-            <div class="alert alert-info">No quizzes available.</div>
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> No quizzes available.
+            </div>
         <?php else: ?>
             <?php foreach($quizzes as $quiz): ?>
-            <div class="card quiz-card">
+            <div class="quiz-card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <h5 class="card-title"><?php echo htmlspecialchars($quiz["title"]); ?></h5>
-                            <h6 class="card-subtitle mb-2 text-muted"><?php echo htmlspecialchars($quiz["course_title"]); ?></h6>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <i class="fas fa-book"></i> <?php echo htmlspecialchars($quiz["course_title"]); ?>
+                            </h6>
                             <p class="card-text"><?php echo htmlspecialchars($quiz["description"]); ?></p>
                         </div>
                         <div class="text-right">
@@ -148,12 +246,16 @@ if($stmt = mysqli_prepare($conn, $sql)){
                                 <p class="attempts mb-2">
                                     <i class="fas fa-check-circle"></i> Attempts: <?php echo $quiz["attempts"]; ?>
                                 </p>
-                                <a href="take_quiz.php?id=<?php echo $quiz["quiz_id"]; ?>" class="btn btn-primary">Take Quiz</a>
+                                <a href="take_quiz.php?id=<?php echo $quiz["quiz_id"]; ?>" class="btn btn-primary">
+                                    <i class="fas fa-play"></i> Take Quiz
+                                </a>
                             <?php else: ?>
                                 <p class="attempts mb-2">
                                     <i class="fas fa-users"></i> Total Attempts: <?php echo $quiz["total_attempts"]; ?>
                                 </p>
-                                <a href="view_quiz_results.php?id=<?php echo $quiz["quiz_id"]; ?>" class="btn btn-info">View Results</a>
+                                <a href="view_quiz_results.php?id=<?php echo $quiz["quiz_id"]; ?>" class="btn btn-info">
+                                    <i class="fas fa-chart-bar"></i> View Results
+                                </a>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -164,7 +266,6 @@ if($stmt = mysqli_prepare($conn, $sql)){
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html> 
