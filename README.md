@@ -1,4 +1,3 @@
-````
 # 🎓 LMS – Learning Management System
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/albymbiju1/LMS/php-composer.yml?branch=main&label=build&logo=github)](https://github.com/albymbiju1/LMS/actions/workflows/php-composer.yml)  
