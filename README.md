@@ -8,18 +8,20 @@
 
 > **LMS** is a PHP-based Learning Management System designed to empower instructors and engage learners through seamless course creation, interactive assessments, and robust analytics.
 
+---
+
 ## 📑 Table of Contents
 
-1. [🚀 Tech Stack](#-tech-stack)  
-2. [🛠️ Prerequisites](#️-prerequisites)  
-3. [⚙️ Installation & Setup](#️-installation--setup)  
-4. [🚦 Running the App](#-running-the-app)  
-5. [✨ Core Features](#-core-features)  
-6. [📂 Project Structure](#-project-structure)  
-7. [📈 Roadmap & Ideas](#-roadmap--ideas)  
-8. [🤝 Contributing](#-contributing)  
-9. [📖 License](#-license)  
-10. [📸 Screenshots & Demo](#-screenshots--demo)  
+1. 🚀 [Tech Stack](#-tech-stack)  
+2. 🛠️ [Prerequisites](#️-prerequisites)  
+3. ⚙️ [Installation & Setup](#️-installation--setup)  
+4. 🚦 [Running the App](#-running-the-app)  
+5. ✨ [Core Features](#-core-features)  
+6. 📂 [Project Structure](#-project-structure)  
+7. 📈 [Roadmap & Ideas](#-roadmap--ideas)  
+8. 🤝 [Contributing](#-contributing)  
+9. 📖 [License](#-license)  
+10. 📸 [Screenshots & Demo](#-screenshots--demo)  
 
 ---
 
@@ -27,178 +29,112 @@
 
 | Layer        | Technology                     |
 | ------------ | ------------------------------ |
-| **Backend**  | Python ≥ 3.9, Django ≥ 4.0     |
-| **Frontend** | React ≥ 18, Tailwind CSS       |
-| **Database** | PostgreSQL ≥ 14                |
-| **Auth**     | JWT / OAuth2                   |
-| **DevOps**   | Docker, GitHub Actions, Nginx  |
+| **Backend**  | PHP ≥ 7.4, Composer            |
+| **Database** | MySQL ≥ 8.0                    |
+| **Frontend** | HTML5, CSS3, Bootstrap 5       |
+| **Testing**  | PHPUnit                        |
+| **CI/CD**    | GitHub Actions, Codecov        |
 
 ---
 
 ## 🛠️ Prerequisites
 
-- **Python** ≥ 3.9  
-- **Node.js** ≥ 18  
-- **PostgreSQL** ≥ 13  
-- **Docker & Docker Compose** (optional, for containerized deployment)
+- PHP ≥ 7.4  
+- Composer  
+- MySQL ≥ 8.0  
+- (Optional) Docker & Docker Compose  
 
 ---
 
 ## ⚙️ Installation & Setup
 
 <details>
-  <summary>1. Clone the repository</summary>
+<summary>1. Clone the repository</summary>
 
 ```bash
 git clone https://github.com/albymbiju1/LMS.git
 cd LMS
-````
-
-</details>
-
-<details>
-  <summary>2. Backend Setup</summary>
-
-```bash
-cd backend
-pip install -r requirements.txt
-
-# Copy & configure environment variables
+</details> <details> <summary>2. Install dependencies</summary>
+bash
+Copy
+Edit
+composer install
+</details> <details> <summary>3. Configure environment</summary>
+bash
+Copy
+Edit
 cp .env.example .env
-# ▶ Open `.env` and set DATABASE_URL, SECRET_KEY, etc.
+# ▶ Edit `.env`, set DB_HOST, DB_NAME, DB_USER, DB_PASS, etc.
+</details> <details> <summary>4. Database setup</summary>
+bash
+Copy
+Edit
+# Create database named in .env
+mysql -u root -p -e "CREATE DATABASE lms CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
-# Run database migrations & create admin user
-python manage.py migrate
-python manage.py createsuperuser
-```
-
+# Run migrations (if using a migration tool) or import schema:
+mysql -u root -p lms < database/schema.sql
 </details>
+🚦 Running the App
+bash
+Copy
+Edit
+# Start PHP built-in server (for dev)
+php -S localhost:8000 -t public
+Then open your browser at http://localhost:8000
 
-<details>
-  <summary>3. Frontend Setup (React SPA)</summary>
+✨ Core Features
+🔐 User Authentication (Admin, Instructor, Student)
 
-```bash
-cd ../frontend
-npm install
-npm run build
-```
+📚 Course & Module Management
 
-</details>
+📝 Assessment Engine (Quizzes, auto-grading)
 
-<details>
-  <summary>4. Docker & Docker Compose (Optional)</summary>
+📊 Progress Analytics & Reporting
 
-```bash
-# Build & start all services
-docker-compose up --build -d
-
-# Apply migrations & seed initial data
-docker-compose exec backend python manage.py migrate
-docker-compose exec backend python manage.py loaddata initial_data.json
-```
-
-</details>
-
----
-
-## 🚦 Running the App
-
-```bash
-# Start backend server
-cd backend
-python manage.py runserver 0.0.0.0:8000
-
-# (Optional) Start frontend dev server
-cd ../frontend
-npm run start
-```
-
-Once running, visit:
-
-* **Backend API:** `http://localhost:8000`
-* **Frontend App:** `http://localhost:3000`
-
----
-
-## ✨ Core Features
-
-> **Empower your teaching and learning workflows.**
-
-### 🔐 Authentication & Authorization
-
-* Role-based access: **Admin**, **Instructor**, **Student**
-* Secure JWT-powered sessions
-
-### 📚 Course & Module Management
-
-* **Create**, **Edit**, **Publish** courses
-* Structure content into **Modules** with video, PDF, and quizzes
-
-### 📝 Assessment Engine
-
-* Flexible quiz types: MCQ, True/False, Short Answer
-* Auto-grading + manual grading interface
-
-### 📊 Analytics & Reporting
-
-* Real-time student progress dashboards
-* Exportable reports (CSV / PDF)
-
----
-
-## 📂 Project Structure
-
-```
+📂 Project Structure
+pgsql
+Copy
+Edit
 LMS/
-├── backend/            # Django REST API
-│   ├── manage.py       # Entry point
-│   ├── .env.example    # Env var template
-│   ├── lms/            # Core LMS app
-│   ├── users/          # Auth & profiles
-│   ├── courses/        # Course logic
-│   └── assessments/    # Quizzes & grading
-├── frontend/           # React SPA (if applicable)
-│   ├── public/         # Static assets
-│   ├── src/            # React components & pages
-│   └── package.json
-└── docker-compose.yml  # Dev & production orchestrator
-```
+├── app/            # Core PHP code
+│   ├── controllers/
+│   ├── models/
+│   └── views/
+├── public/         # Public entry (index.php, assets)
+├── tests/          # PHPUnit tests
+├── .github/
+│   └── workflows/  # CI workflows
+├── composer.json
+├── .env.example
+└── database/
+    └── schema.sql
+📈 Roadmap & Ideas
+📱 Mobile-friendly UI
 
----
+🌐 Multi-language support
 
-## 📈 Roadmap & Ideas
+🏆 Gamification (badges & leaderboards)
 
-* 📱 **Mobile App**: React Native companion
-* 🌐 **Multi-language** support & i18n
-* 🏆 **Gamification**: badges & leaderboards
-* 🤖 **AI-powered** content recommendations
+🤖 AI-driven content recommendations
 
-*Check out open issues or propose features on our [Issues Page](https://github.com/albymbiju1/LMS/issues)!*
+🤝 Contributing
+Fork the repo
 
----
+Create a branch: git checkout -b feat/your-feature
 
-## 🤝 Contributing
+Commit & push your changes
 
-We ❤️ contributions! Please follow these steps:
+Open a Pull Request
 
-1. **Fork** the repository
-2. **Create** a feature branch
+📖 License
+Distributed under the MIT License.
+See LICENSE for details.
 
-   ```bash
-   git checkout -b feat/awesome-feature
-   ```
-3. Implement & **test** your changes
-4. **Push** to your fork & submit a **Pull Request**
-5. Ensure CI passes & adhere to our [Code of Conduct](CODE_OF_CONDUCT.md)
+📸 Screenshots & Demo
 
----
 
-**Live Preview:** [https://codeaura.xyz](https://codeaura.xyz)
+Live Demo: https://codeaura.xyz
 
-```
-
-> **Next steps:**  
-> 1. Create a `.github/workflows/ci.yml` for your CI pipeline so the build badge lights up.  
-> 2. Hook up Codecov (or Coveralls) in your pipeline and update the coverage badge URL.  
-> 3. Commit your workflow and push to `main`—your badges will turn green!
-```
+Copy
+Edit
