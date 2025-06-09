@@ -1,9 +1,6 @@
 # 🎓 LMS – Learning Management System
-
-[![Build Status](https://img.shields.io/github/actions/workflow/status/albymbiju1/LMS/php-composer.yml?branch=main&label=build&logo=github)](https://github.com/albymbiju1/LMS/actions/workflows/php-composer.yml)  
-[![Coverage Status](https://img.shields.io/codecov/c/github/albymbiju1/LMS/main?logo=codecov)](https://codecov.io/gh/albymbiju1/LMS)  
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/albymbiju1/LMS/blob/main/LICENSE)  
-[![PHP ≥7.4](https://img.shields.io/packagist/php-v/albymbiju1/lms?logo=php)](https://www.php.net/)  
+  
+[![PHP ≥8.1](https://img.shields.io/packagist/php-v/albymbiju1/lms?logo=php)](https://www.php.net/)  
 [![MySQL ≥8.0](https://img.shields.io/badge/MySQL-%3E%3D8.0-blue?logo=mysql)](https://www.mysql.com/)
 
 > **LMS** is a PHP-based Learning Management System designed to empower instructors and engage learners through seamless course creation, interactive assessments, and robust analytics.
