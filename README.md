@@ -1,36 +1,13 @@
-Here’s an updated **README.md** with working‐style badges (you’ll just need to replace the CI and coverage URLs once your workflows are set up):
+# 🎓 LMS – Learning Management System
 
-````markdown
-<p align="center">
-  <img src="https://raw.githubusercontent.com/albymbiju1/LMS/main/docs/logo.png" alt="LMS Logo" width="150" />
-</p>
-<h1 align="center">🎓 LMS – Learning Management System</h1>
-<p align="center">
-  <!-- Build Status (GitHub Actions) -->
-  <a href="https://github.com/albymbiju1/LMS/actions/workflows/ci.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/albymbiju1/LMS/ci.yml?branch=main&label=build&logo=github" alt="build status" />
-  </a>
-  <!-- Coverage (Codecov) -->
-  <a href="https://codecov.io/gh/albymbiju1/LMS">
-    <img src="https://img.shields.io/codecov/c/github/albymbiju1/LMS/main?logo=codecov" alt="coverage status" />
-  </a>
-  <!-- License -->
-  <a href="https://github.com/albymbiju1/LMS/blob/main/LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license" />
-  </a>
-  <!-- Django Version -->
-  <a href="https://pypi.org/project/django/">
-    <img src="https://img.shields.io/pypi/v/django?label=Django%20%E2%89%A54.0&logo=django" alt="Django version" />
-  </a>
-  <!-- Python Version -->
-  <a href="https://www.python.org/">
-    <img src="https://img.shields.io/badge/Python-%3E%3D3.9-blue.svg?logo=python" alt="Python version" />
-  </a>
-</p>
+[![Build Status](https://img.shields.io/github/actions/workflow/status/albymbiju1/LMS/ci.yml?branch=main&label=build&logo=github)](https://github.com/albymbiju1/LMS/actions/workflows/ci.yml)  
+[![Coverage Status](https://img.shields.io/codecov/c/github/albymbiju1/LMS/main?logo=codecov)](https://codecov.io/gh/albymbiju1/LMS)  
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/albymbiju1/LMS/blob/main/LICENSE)  
+[![Django ≥4.0](https://img.shields.io/pypi/v/django?label=Django%20%E2%89%A54.0&logo=django)](https://pypi.org/project/django/)  
+[![Python ≥3.9](https://img.shields.io/badge/Python-%3E%3D3.9-blue.svg?logo=python)](https://www.python.org/)
 
 > **LMS** is a cutting-edge Learning Management System designed to empower instructors and engage learners through seamless course creation, interactive assessments, and robust analytics.
 
----
 
 ## 📑 Table of Contents
 
