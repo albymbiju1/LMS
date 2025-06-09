@@ -1,3 +1,4 @@
+````
 # 🎓 LMS – Learning Management System
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/albymbiju1/LMS/php-composer.yml?branch=main&label=build&logo=github)](https://github.com/albymbiju1/LMS/actions/workflows/php-composer.yml)  
@@ -54,87 +55,83 @@
 ```bash
 git clone https://github.com/albymbiju1/LMS.git
 cd LMS
-</details> <details> <summary>2. Install dependencies</summary>
-bash
-Copy
-Edit
+````
+
+</details>
+
+<details>
+<summary>2. Install dependencies</summary>
+
+```bash
 composer install
-</details> <details> <summary>3. Configure environment</summary>
-bash
-Copy
-Edit
+```
+
+</details>
+
+<details>
+<summary>3. Configure environment</summary>
+
+```bash
 cp .env.example .env
 # ▶ Edit `.env`, set DB_HOST, DB_NAME, DB_USER, DB_PASS, etc.
-</details> <details> <summary>4. Database setup</summary>
-bash
-Copy
-Edit
+```
+
+</details>
+
+<details>
+<summary>4. Database setup</summary>
+
+```bash
 # Create database named in .env
 mysql -u root -p -e "CREATE DATABASE lms CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
 # Run migrations (if using a migration tool) or import schema:
 mysql -u root -p lms < database/schema.sql
+```
+
 </details>
-🚦 Running the App
-bash
-Copy
-Edit
+
+---
+
+## 🚦 Running the App
+
+```bash
 # Start PHP built-in server (for dev)
 php -S localhost:8000 -t public
-Then open your browser at http://localhost:8000
+```
 
-✨ Core Features
-🔐 User Authentication (Admin, Instructor, Student)
+Then open your browser at **[http://localhost:8000](http://localhost:8000)**
 
-📚 Course & Module Management
+---
 
-📝 Assessment Engine (Quizzes, auto-grading)
+## ✨ Core Features
 
-📊 Progress Analytics & Reporting
+* 🔐 **User Authentication** (Instructor, Student)
+* 📚 **Course & Module Management**
+* 📝 **Assessment Engine** (Quizzes, auto-grading)
+* 📊 **Progress Analytics & Reporting**
 
-📂 Project Structure
-pgsql
-Copy
-Edit
-LMS/
-├── app/            # Core PHP code
-│   ├── controllers/
-│   ├── models/
-│   └── views/
-├── public/         # Public entry (index.php, assets)
-├── tests/          # PHPUnit tests
-├── .github/
-│   └── workflows/  # CI workflows
-├── composer.json
-├── .env.example
-└── database/
-    └── schema.sql
-📈 Roadmap & Ideas
-📱 Mobile-friendly UI
+---
 
-🌐 Multi-language support
+## 📈 Roadmap & Ideas
 
-🏆 Gamification (badges & leaderboards)
+* 📱 **Mobile-friendly UI**
+* 🌐 **Multi-language support**
+* 🏆 **Gamification (badges & leaderboards)**
+* 🤖 **AI-driven content recommendations**
 
-🤖 AI-driven content recommendations
+---
 
-🤝 Contributing
-Fork the repo
+## 🤝 Contributing
 
-Create a branch: git checkout -b feat/your-feature
+1. Fork the repo
+2. Create a branch: `git checkout -b feat/your-feature`
+3. Commit & push your changes
+4. Open a Pull Request
 
-Commit & push your changes
+---
 
-Open a Pull Request
+**Live Demo:** [https://codeaura.xyz](https://codeaura.xyz)
 
-📖 License
-Distributed under the MIT License.
-See LICENSE for details.
-
-📸 Screenshots & Demo
-
-
-Live Demo: https://codeaura.xyz
-
-Copy
-Edit
+```
+```
